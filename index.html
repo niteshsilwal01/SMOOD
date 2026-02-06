@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMOOD – Safety‑Aware Multi‑Modal OOD Detection for RL‑based Robotic Inspection</title>
+    <!-- Link to the site stylesheet -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- Header with project title and navigation -->
+    <header class="header">
+      <div class="container">
+        <h1 class="title">SMOOD</h1>
+        <p class="subtitle">Safety‑Aware Multi‑Modal Out‑of‑Distribution Detection<br>for Reinforcement Learning‑Based Robotic Inspection</p>
+        <!-- Navigation anchors to page sections -->
+        <nav class="nav">
+          <ul>
+            <li><a href="#abstract">Abstract</a></li>
+            <li><a href="#methodology">Methodology</a></li>
+            <li><a href="#results">Results</a></li>
+            <li><a href="#conclusion">Conclusion</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- Abstract section with brief summary and architecture diagram -->
+      <section id="abstract" class="section">
+        <div class="container">
+          <h2>Abstract</h2>
+          <p>
+            Robotic systems are increasingly deployed for high‑precision industrial inspection tasks, but controllers trained under nominal conditions often fail silently when faced with perceptual disturbances or unexpected interactions.  To address this challenge, the <strong>Safety‑Aware Multi‑Modal Out‑of‑Distribution&nbsp;(SMOOD)</strong> framework decouples task learning from safety enforcement by monitoring both proprioceptive dynamics and semantic visual representations in a shared latent space.  Deviations from nominal behavior are detected using distributional distance metrics, enabling the controller to pause when the system leaves the in‑distribution region and resume once it returns.  Experiments on a UR5e surface‑inspection platform demonstrate that SMOOD achieves earlier out‑of‑distribution detection and safer task execution than single‑modality baselines<sup><a href="#ref1">[1]</a></sup>.
+          </p>
+          <!-- Architecture diagram image -->
+          <figure class="figure">
+            <img src="architecture.png" alt="Proposed SMOOD architecture showing a PPO network for policy learning and a safety layer that fuses visual and proprioceptive cues for runtime out‑of‑distribution detection. The safety layer compares latent representations against a nominal reference using distance metrics, then gates actions based on a threshold.">
+            <figcaption>Figure: Proposed SMOOD architecture. Simulation‑trained PPO actions are filtered at deployment by a safety layer using visual and proprioceptive cues to determine safe execution on the robot.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Methodology section summarizing problem formulation and safety layer -->
+      <section id="methodology" class="section">
+        <div class="container">
+          <h2>Methodology</h2>
+          <p>
+            The inspection task is formulated as a continuous‑state Markov Decision Process in which a control policy \(\pi_\theta(a_t|s_t)\) is trained in simulation using the Proximal Policy Optimization (PPO) algorithm.  During training, an actor‑critic architecture is optimized by maximizing a clipped surrogate objective while maintaining smooth trajectories<sup><a href="#ref2">[2]</a></sup>.  Although the policy produces high‑level actions, it lacks semantic awareness of the scene.
+          </p>
+          <p>
+            To provide semantic grounding, a vision–language model (VLM) encodes RGB–D observations into a compact visual latent \(z^\text{vis}_t\).  This representation localizes the target object and aids safety monitoring by capturing perceptual anomalies such as occlusions or unexpected objects<sup><a href="#ref3">[3]</a></sup>.  In parallel, a proprioceptive latent \(z^\text{ppo}_t\) is obtained from the policy’s actor network, encapsulating the robot’s internal dynamics.
+          </p>
+          <p>
+            The deployment‑time <em>safety layer</em> operates independently of policy learning.  It maintains reference sets of nominal latents collected under safe execution and models distributional deviation using the Sliced&nbsp;Wasserstein Distance (SWD) in high‑dimensional latent spaces<sup><a href="#ref4">[4]</a></sup>.  At runtime, live latents are normalized and compared to their nominal references; scores are smoothed with an uncertainty‑aware exponential moving average and combined across modalities using softmax gating.  Actions are permitted when the fused score lies within a conservative confidence bound; otherwise, the robot pauses and monitors until it re‑enters the in‑distribution region<sup><a href="#ref5">[5]</a></sup>.
+          </p>
+        </div>
+      </section>
+
+      <!-- Results section summarizing experimental setup and findings -->
+      <section id="results" class="section">
+        <div class="container">
+          <h2>Results</h2>
+          <p>
+            SMOOD was evaluated on a UR5e robotic platform performing surface inspection with a 3D scanner.  The policy was trained in simulation under nominal conditions and deployed with the safety layer active only at runtime<sup><a href="#ref6">[6]</a></sup>.  Comparative experiments against no‑safety and single‑modality baselines show that the proposed framework detects out‑of‑distribution events earlier and improves task reliability.  In particular, fusing visual and proprioceptive cues yields a robust decision boundary that reduces false detections and shortens downtime.
+          </p>
+          <p>
+            The evaluation highlights three key contributions: (1) the first runtime safety architecture tailored for reinforcement‑learning‑based robotic inspection; (2) a multi‑modal out‑of‑distribution detection strategy that fuses proprioceptive dynamics with semantic visual embeddings; and (3) simulation and real‑world validations demonstrating improved detection latency, recovery robustness and overall task success<sup><a href="#ref7">[7]</a></sup>.
+          </p>
+        </div>
+      </section>
+
+      <!-- Conclusion section summarizing the impact and future directions -->
+      <section id="conclusion" class="section">
+        <div class="container">
+          <h2>Conclusion</h2>
+          <p>
+            The SMOOD framework demonstrates that safety monitoring for reinforcement learning can be treated as a deployment‑time problem rather than solely a training‑time constraint.  By jointly analyzing visual and proprioceptive latents and using distributional distance metrics for out‑of‑distribution detection, SMOOD enables robotic inspectors to pause and resume autonomously in the presence of disturbances.  Future work could explore richer multi‑modal representations, adaptive thresholding and integration with recovery policies to further enhance autonomy and safety.
+          </p>
+        </div>
+      </section>
+
+      <!-- References section with tether IDs as hyperlinks -->
+      <section id="references" class="section">
+        <div class="container">
+          <h2>References</h2>
+          <ol>
+            <li id="ref1"><a href="【576141699418662†L24-L37】">【576141699418662†L24-L37】</a></li>
+            <li id="ref2"><a href="【576141699418662†L220-L246】">【576141699418662†L220-L246】</a></li>
+            <li id="ref3"><a href="【576141699418662†L257-L283】">【576141699418662†L257-L283】</a></li>
+            <li id="ref4"><a href="【576141699418662†L306-L335】">【576141699418662†L306-L335】</a></li>
+            <li id="ref5"><a href="【576141699418662†L352-L383】">【576141699418662†L352-L383】</a></li>
+            <li id="ref6"><a href="【576141699418662†L121-L128】">【576141699418662†L121-L128】</a></li>
+            <li id="ref7"><a href="【576141699418662†L129-L141】">【576141699418662†L129-L141】</a></li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer with acknowledgements and licensing -->
+    <footer class="footer">
+      <div class="container">
+        <p>This page summarizes the research by Nitesh&nbsp;Silwal and Hongyue&nbsp;Sun from the University of Georgia on safety‑aware multi‑modal out‑of‑distribution detection for robotic inspection.  Please cite the original paper when referencing this work.</p>
+      </div>
+    </footer>
+  </body>
+</html>
