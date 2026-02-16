@@ -45,16 +45,46 @@
 
     <div class="paper-links">
       <a href="#" class="paper-btn">
-        📄 Paper
+        <svg class="paper-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+          <line x1="8" y1="16" x2="12" y2="16"/>
+        </svg>
+        Paper
       </a>
       <a href="#" class="paper-btn">
-        💻 Code
+        <svg class="paper-btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+        Code
       </a>
     </div>
   </header>
 
 
     <main class="main">
+      <!-- Sliding GIF strip (GIFs from videos/gif/ folder) -->
+      <section class="gif-slider-section" aria-label="Demo preview">
+        <div class="gif-slider-wrap">
+          <div class="gif-slider-track">
+            <div class="gif-slider-item"><img src="videos/gif/slide1.gif" alt="Demo 1"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide2.gif" alt="Demo 2"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide3.gif" alt="Demo 3"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide4.gif" alt="Demo 4"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide5.gif" alt="Demo 5"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide6.gif" alt="Demo 6"></div>
+            <!-- Duplicate set for seamless loop -->
+            <div class="gif-slider-item"><img src="videos/gif/slide1.gif" alt="Demo 1"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide2.gif" alt="Demo 2"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide3.gif" alt="Demo 3"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide4.gif" alt="Demo 4"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide5.gif" alt="Demo 5"></div>
+            <div class="gif-slider-item"><img src="videos/gif/slide6.gif" alt="Demo 6"></div>
+          </div>
+        </div>
+      </section>
+
       <!-- Abstract section with brief summary and architecture diagram -->
       <section id="abstract" class="section">
         <div class="container">
@@ -168,16 +198,32 @@ executed by an RL policy through a real-time RTDE servo interface at 120 Hz.</fi
           <p>
             SMOOD was evaluated on a UR5e robotic platform performing surface inspection with a 3D scanner.  The policy was trained in simulation under nominal conditions and deployed with the safety layer active only at runtime.  Comparative experiments, tabulated in Table 1, against no‑safety and single‑modality baselines show that the proposed framework detects out‑of‑distribution events earlier and improves task reliability.  In particular, fusing visual and proprioceptive cues yields a robust decision boundary that reduces false detections and shortens downtime.
           </p>
-          <!-- Demo Video -->
-              <video
-                class="demo-video"
-                src="SMOOD.mp4"
-                autoplay
-                loop
-                muted
-                playsinline
-                controls>
-              </video>
+          <!-- Demo Video with OOD scenario tabs -->
+          <div class="video-tabs-wrap">
+            <div class="video-tabs" role="tablist">
+              <button type="button" class="video-tab active" role="tab" aria-selected="true" data-video="videos/SMOOD.mp4">
+                Visual occlusion
+              </button>
+              <button type="button" class="video-tab" role="tab" aria-selected="false" data-video="videos/workspace_violation.mp4">
+                Workspace Violation
+              </button>
+              <button type="button" class="video-tab" role="tab" aria-selected="false" data-video="videos/Obstacle TCP.mp4">
+                Obstacle blocking TCP
+              </button>
+              <button type="button" class="video-tab" role="tab" aria-selected="false" data-video="videos/lighting_degradation.mp4">
+                Lighting degradation
+              </button>
+            </div>
+            <video
+              class="demo-video"
+              src="videos/SMOOD.mp4"
+              autoplay
+              loop
+              muted
+              playsinline
+              controls>
+            </video>
+          </div>
           <p>
             The evaluation highlights three key contributions: (1) the first runtime safety architecture tailored for reinforcement‑learning‑based robotic inspection; (2) a multi‑modal out‑of‑distribution detection strategy that fuses proprioceptive dynamics with semantic visual embeddings; and (3) real‑world validations demonstrating improved detection latency, recovery robustness and overall task success.
           </p>
@@ -370,6 +416,26 @@ executed by an RL policy through a real-time RTDE servo interface at 120 Hz.</fi
 </section>
 
     </main>
+
+    <script>
+      (function(){
+        var tabs = document.querySelectorAll('.video-tab');
+        var video = document.querySelector('.video-tabs-wrap .demo-video');
+        if (!tabs.length || !video) return;
+        tabs.forEach(function(tab){
+          tab.addEventListener('click', function(){
+            var src = this.getAttribute('data-video');
+            if (!src) return;
+            tabs.forEach(function(t){ t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+            this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
+            video.src = src;
+            video.load();
+            video.play();
+          });
+        });
+      })();
+    </script>
 
     <!-- Footer with acknowledgements and licensing -->
     <footer class="footer">
